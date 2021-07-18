@@ -1,0 +1,11 @@
+main: DiamondStrider1\BlockCommands\BCPlugin
+version: 0.0.1
+api: 3.21.1
+
+name: BlockCommands
+author: DiamondStrider1
+description: This plugin allows commands to run when people punch, break, step, or interact with blocks.
+website: https://github.com/Swift-Strider/BlockCommands
+
+commands: []
+permissions: []
