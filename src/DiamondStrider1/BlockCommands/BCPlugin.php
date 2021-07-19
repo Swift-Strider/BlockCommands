@@ -24,8 +24,85 @@ declare(strict_types=1);
 
 namespace DiamondStrider1\BlockCommands;
 
+use pocketmine\level\Location;
+use pocketmine\level\Position;
+use pocketmine\math\Vector3;
 use pocketmine\plugin\PluginBase;
+use pocketmine\utils\TextFormat as TF;
 
 class BCPlugin extends PluginBase
 {
+    /** @var BCData */
+    private $data;
+    /** @var BCListener */
+    private $listener;
+
+    public function onEnable()
+    {
+        $this->reloadConfig();
+        $this->data = new BCData($this);
+        if (count($errors = $this->data->getErrors()) !== 0) {
+            $this->getLogger()->alert(TF::BOLD . "The data.yml file has the following errors (These BlockCommands will not function):");
+            $this->getLogger()->alert(str_repeat("-", 25));
+            foreach ($errors as $e) {
+                $this->getLogger()->alert(TF::YELLOW .   $e);
+            }
+        }
+        $this->listener = new BCListener($this);
+        $this->getServer()->getPluginManager()->registerEvents($this->listener, $this);
+    }
+
+    public function onDisable()
+    {
+        // $this->data->saveConfig();
+    }
+
+    public function getBlockCommandsAtPosition(Position $pos): array
+    {
+        $ret = [];
+        $pos->setComponents(
+            $pos->getFloorX(),
+            $pos->getFloorY(),
+            $pos->getFloorZ()
+        );
+        $blockCommands = $this->data->getEntries();
+        foreach ($blockCommands as $bc) {
+            foreach ($bc["blocks"] as $block) {
+                $level = $this->getServer()->getLevelByName($block["level"]);
+                if (!$level) continue;
+                $vector = new Vector3($block["x"], $block["y"], $block["z"]);
+                if ($pos->equals($vector)) {
+                    $ret[] = $bc;
+                    continue 2;
+                }
+            }
+            foreach ($bc["areas"] as $area) {
+                $level = $this->getServer()->getLevelByName($area["level"]);
+                if (!$level || $level !== $pos->getLevel()) continue;
+                $vector1 = new Vector3($area["x1"], $area["y1"], $area["z1"]);
+                $vector2 = new Vector3($area["x2"], $area["y2"], $area["z2"]);
+                if ($this->in_area($pos, $vector1, $vector2)) {
+                    $ret[] = $bc;
+                    continue 2;
+                }
+            }
+        }
+        return $ret;
+    }
+
+    private function in_area(Vector3 $subject, Vector3 $pos1, Vector3 $pos2)
+    {
+        return $this->in_bounds($subject->x, $pos1->x, $pos2->x) &&
+            $this->in_bounds($subject->y, $pos1->y, $pos2->y) &&
+            $this->in_bounds($subject->z, $pos1->z, $pos2->z);
+    }
+
+    private function in_bounds($subject, $num1, $num2)
+    {
+        return $subject <= max($num1, $num2) && $subject >= min($num1, $num2);
+    }
+
+    const VALID_EVENTS = [
+        "punch", "break", "step", "interact"
+    ];
 }

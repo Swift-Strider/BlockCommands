@@ -1,0 +1,8 @@
+# Whether to send the output of commands
+# executed because of a BlockCommand to console.
+send_blockcommand_output: false
+
+# Cooldown for sending interact events in seconds.
+# It prevents activating a BlockCommand multiple times on accident.
+# This value will be converted and rounded down to the nearest tick.
+interact_debounce_time: 1.0
