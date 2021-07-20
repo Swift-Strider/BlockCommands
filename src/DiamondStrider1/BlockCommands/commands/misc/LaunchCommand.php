@@ -60,16 +60,13 @@ class LaunchCommand extends BCCommand
             return true;
         }
 
-        $this->dealKnockBack($player, (float) array_shift($args), (float) array_shift($args), (float) array_shift($args), (bool) array_shift($args));
+        $this->dealKnockBack($player, (float) array_shift($args), (float) array_shift($args), (float) array_shift($args));
         return true;
     }
 
-    private function dealKnockBack(Player $player, float $x, float $y, float $z, bool $relative = false)
+    private function dealKnockBack(Player $player, float $x, float $y, float $z)
     {
         $motion = new Vector3($x, $y, $z);
-        if ($relative) {
-            // TODO: Make KnockBack relative
-        }
         $player->setMotion($motion);
     }
 }
