@@ -65,6 +65,8 @@ class BCData
             $this->plugin->getLogger()->alert("Data file was corrupted! Moved file to data.yml.corrupted!");
             $this->data = new Config($dataPath);
         }
+        $this->workingEntries = [];
+        $this->brokenEntries = [];
         $this->validate();
     }
 
@@ -83,6 +85,26 @@ class BCData
     public function getEntries(): array
     {
         return $this->workingEntries;
+    }
+
+    public function getEntry(string $id): ?array
+    {
+        return isset($this->workingEntries[$id]) ? $this->workingEntries[$id] : null;
+    }
+
+    public function setEntry(string $id, array $data): void
+    {
+        $this->workingEntries[$id] = $data;
+    }
+
+    public function removeEntry(string $id): bool
+    {
+        if (isset($this->workingEntries[$id])) {
+            unset($this->workingEntries[$id]);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private function validate()

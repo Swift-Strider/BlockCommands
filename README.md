@@ -62,6 +62,10 @@
 >
 > -   `/bc ...`
 >     You can also use /blockcommands.
+> -   `/bc loadconfig`
+>     This reloads data from data.yml.
+> -   `/bc saveconfig`
+>     This saves data to data.yml.
 > -   `/bc create <name> [...events]`
 >     This makes a new BlockCommand with the given block events turned on. Valid `[...events]` are: punch, break, step, interact.
 > -   `/bc configure <name>`

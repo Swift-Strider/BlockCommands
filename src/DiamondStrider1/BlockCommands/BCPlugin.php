@@ -24,7 +24,9 @@ declare(strict_types=1);
 
 namespace DiamondStrider1\BlockCommands;
 
-use pocketmine\level\Location;
+use DiamondStrider1\BlockCommands\commands\management\ManageCommand;
+use DiamondStrider1\BlockCommands\commands\misc\LaunchCommand;
+use DiamondStrider1\BlockCommands\commands\misc\SudoCommand;
 use pocketmine\level\Position;
 use pocketmine\math\Vector3;
 use pocketmine\plugin\PluginBase;
@@ -32,6 +34,10 @@ use pocketmine\utils\TextFormat as TF;
 
 class BCPlugin extends PluginBase
 {
+    const VALID_EVENTS = [
+        "punch", "break", "step", "interact"
+    ];
+
     /** @var BCData */
     private $data;
     /** @var BCListener */
@@ -48,13 +54,60 @@ class BCPlugin extends PluginBase
                 $this->getLogger()->alert(TF::YELLOW .   $e);
             }
         }
+
         $this->listener = new BCListener($this);
         $this->getServer()->getPluginManager()->registerEvents($this->listener, $this);
+
+        $this->getServer()->getCommandMap()->registerAll("blockcommands", [
+            new ManageCommand("bc", $this),
+            new LaunchCommand("launch", $this),
+            new SudoCommand("sudo", $this),
+        ]);
     }
 
     public function onDisable()
     {
-        // $this->data->saveConfig();
+        $this->saveData();
+    }
+
+    public function reloadData()
+    {
+        $this->data->loadConfig();
+    }
+
+    public function saveData()
+    {
+        $this->data->saveConfig();
+    }
+
+    public function createBlockCommand(string $id): array
+    {
+        $events = [];
+        foreach (self::VALID_EVENTS as $ev) {
+            $events[$ev] = false;
+        }
+        $this->data->setEntry($id, [
+            "commands" => [],
+            "blocks" => [],
+            "areas" => [],
+            "events" => $events
+        ]);
+        return $this->data->getEntry($id);
+    }
+
+    public function changeBlockCommand(string $id, array $data = null): bool
+    {
+        if (!$data) {
+            return $this->data->removeEntry($id);
+        } else {
+            $this->data->setEntry($id, $data);
+            return true;
+        }
+    }
+
+    public function getBlockCommands(): array
+    {
+        return $this->data->getEntries();
     }
 
     public function getBlockCommandsAtPosition(Position $pos): array
@@ -101,8 +154,4 @@ class BCPlugin extends PluginBase
     {
         return $subject <= max($num1, $num2) && $subject >= min($num1, $num2);
     }
-
-    const VALID_EVENTS = [
-        "punch", "break", "step", "interact"
-    ];
 }
