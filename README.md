@@ -1,15 +1,24 @@
 # BlockCommands
 
-> Allows commands to run when people punch, break, step, or interact with blocks.
+[![](https://poggit.pmmp.io/shield.state/BlockCommands)](https://poggit.pmmp.io/p/BlockCommands)
+<a href="https://poggit.pmmp.io/p/BlockCommands"><img src="https://poggit.pmmp.io/shield.state/BlockCommands"></a>
+[![](https://poggit.pmmp.io/shield.api/BlockCommands)](https://poggit.pmmp.io/p/BlockCommands)
+<a href="https://poggit.pmmp.io/p/BlockCommands"><img src="https://poggit.pmmp.io/shield.api/BlockCommands"></a>
 
-> A BlockCommand is an object that stores commands, blocks, areas, and events. When events happen in-game a BlockCommand is able to respond by running it's commands.
+<div align="center">
+  <img width="100" height="100" src="assets/icon.png">
+</div>
 
-> Tips:
->
-> 1. `/sudo` only runs commands if the message has a "/."
-> 2. You can inject information of the event inside of commands
->     - `{player}` will be replaced by the player's name when a BlockCommand is triggered.
->     - `{position}` will be the position of the block affected.
+Allows commands to run when people punch, break, step, or interact with blocks.
+
+A BlockCommand is an object that stores commands, blocks, areas, and events. When events happen in-game a BlockCommand is able to respond by running it's commands.
+
+Tips:
+
+1.  `/sudo` only runs commands if the message has a "/."
+2.  You can inject information of the event inside of commands
+    -   `{player}` will be replaced by the player's name when a BlockCommand is triggered.
+    -   `{position}` will be the position of the block affected.
 
 ## Usage
 
@@ -28,78 +37,74 @@
 
 ## Features
 
-> ### In general...
->
-> -   The plugin comes with several extra commands like `/launch` to make it easy to build specific contraptions like launchpads.
-> -   Editing commands for multiple blocks is quick since they are all stored on a single BlockCommand.
+-   The plugin comes with several extra commands like `/launch` to make it easy to build specific contraptions like launchpads.
+-   Editing commands for multiple blocks is quick since they are all stored on a single BlockCommand.
 
-> Commands can be run on the block events:
->
-> -   punch (When a player hits a block)
-> -   break (When a player destroys a block)
-> -   step (When a player first lands on a block)
-> -   interact (When a player right-clicks a block)
+Commands can be run on the block events:
 
-> Commands can be attached to:
->
-> -   Blocks
-> -   Areas
+-   punch (When a player hits a block)
+-   break (When a player destroys a block)
+-   step (When a player first lands on a block)
+-   interact (When a player right-clicks a block)
+
+Commands can be attached to:
+
+-   Blocks
+-   Areas
 
 ## All Commands
 
-**Every command with examples**
+Miscellaneous Commands
 
-> Miscellaneous Commands
->
-> -   `/launch <direction-x> <direction-z> <direction-z> [player]`
->
-> Launches the player in the given direction. Use the `[player]` argument instead of `/sudo <player> ...` to bypass permission requirements.
->
-> "/launch 2 5 0" will launch the player who ran the command in the air
->
-> -   `/sudo <player> <message>`
->
-> Sends a message as the player. If the message starts with a "/" it will be ran as a command. Great for commands that needs commands to be sent as player. This will not give the player extra permissions.
->
-> `/sudo player1 /tp 0 0 0` will teleport the player to 0, 0, 0 if they have permission to use `/tp`
+-   `/launch <direction-x> <direction-z> <direction-z> [player]`
 
-> Admin Commands
->
-> _Key: `<name>` will be the name of a BlockCommand._
->
-> -   `/bc ...`
->     You can also use /blockcommands.
-> -   `/bc help` or `/bc edit help`
->     Fetches help for the following admin commands.
-> -   `/bc loadconfig`
->     This reloads data from data.yml.
-> -   `/bc saveconfig`
->     This saves data to data.yml.
-> -   `/bc create <name> [...events]`
->     This makes a new BlockCommand with the given block events turned on. Valid `[...events]` are: punch, break, step, interact.
-> -   `/bc list`
->     Lists all BlockCommands.
-> -   `/bc remove <name>`
->     Removes a BlockCommand.
-> -   `/bc edit configure <name>`
->     Lists all the block events for the BlockCommand.
-> -   `/bc edit configure <name> [...events]`
->     Changes the BlockCommand events to `[...events]`. Ex: `/bc configure teleport_sign punch interact`
-> -   `/bc edit addcommand <name> <command>`
->     Adds a command to a BlockCommand.
-> -   `/bc edit listcommands <name>`
->     Lists commands on a BlockCommand and their index.
-> -   `/bc edit removecommand <name> <index>`
->     Removes the command at the given index from the BlockCommand.
-> -   `/bc edit addblock <name> <x> <y> <z>`
->     Adds the block at `<x> <y> <z>` to the BlockCommand.
-> -   `/bc edit addblock <name>`
->     Adds the block the player is looking at to the BlockCommand.
-> -   `/bc edit addarea <name> <x1> <y1> <z1> <x2> <y2> <z2>`
->     Adds an area to the block command starting from `<x1> <y1> <z1>` ending at `<x2> <y2> <z2>`.
-> -   `/bc edit listattachments <name>`
->     Lists the blocks and areas along with their indexes that are attached to the BlockCommand.
-> -   `/bc edit removeattachment <name> <index>`
->     Removes the block or area at `<index>` from the BlockCommand.
-> -   `/bc edit clearattachments <name>`
->     Removes all blocks and areas associated with the BlockCommand.
+Launches the player in the given direction. Use the `[player]` argument instead of `/sudo <player> ...` to bypass permission requirements.
+
+"/launch 2 5 0" will launch the player who ran the command in the air
+
+-   `/sudo <player> <message>`
+
+Sends a message as the player. If the message starts with a "/" it will be ran as a command. Great for commands that needs commands to be sent as player. This will not give the player extra permissions.
+
+`/sudo player1 /tp 0 0 0` will teleport the player to 0, 0, 0 if they have permission to use `/tp`
+
+Admin Commands
+
+_Key: `<name>` will be the name of a BlockCommand._
+
+-   `/bc ...`
+    You can also use /blockcommands.
+-   `/bc help` or `/bc edit help`
+    Fetches help for the following admin commands.
+-   `/bc loadconfig`
+    This reloads data from data.yml.
+-   `/bc saveconfig`
+    This saves data to data.yml.
+-   `/bc create <name> [...events]`
+    This makes a new BlockCommand with the given block events turned on. Valid `[...events]` are: punch, break, step, interact.
+-   `/bc list`
+    Lists all BlockCommands.
+-   `/bc remove <name>`
+    Removes a BlockCommand.
+-   `/bc edit configure <name>`
+    Lists all the block events for the BlockCommand.
+-   `/bc edit configure <name> [...events]`
+    Changes the BlockCommand events to `[...events]`. Ex: `/bc configure teleport_sign punch interact`
+-   `/bc edit addcommand <name> <command>`
+    Adds a command to a BlockCommand.
+-   `/bc edit listcommands <name>`
+    Lists commands on a BlockCommand and their index.
+-   `/bc edit removecommand <name> <index>`
+    Removes the command at the given index from the BlockCommand.
+-   `/bc edit addblock <name> <x> <y> <z>`
+    Adds the block at `<x> <y> <z>` to the BlockCommand.
+-   `/bc edit addblock <name>`
+    Adds the block the player is looking at to the BlockCommand.
+-   `/bc edit addarea <name> <x1> <y1> <z1> <x2> <y2> <z2>`
+    Adds an area to the block command starting from `<x1> <y1> <z1>` ending at `<x2> <y2> <z2>`.
+-   `/bc edit listattachments <name>`
+    Lists the blocks and areas along with their indexes that are attached to the BlockCommand.
+-   `/bc edit removeattachment <name> <index>`
+    Removes the block or area at `<index>` from the BlockCommand.
+-   `/bc edit clearattachments <name>`
+    Removes all blocks and areas associated with the BlockCommand.
