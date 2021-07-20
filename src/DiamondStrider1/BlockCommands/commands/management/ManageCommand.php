@@ -414,7 +414,7 @@ class ManageCommand extends BCCommand
                 $z2 = array_shift($args);
                 $level = array_shift($args);
 
-                if (array_search(null, [$x1, $y1, $z1, $x2, $y2, $z2], true) !== false) {
+                if ($x1 === null || $y1 === null || $z1 === null || $x2 === null || $y2 === null || $z2 === null) {
                     $sender->sendMessage($error . "Please provide two coordinates and a level.");
                     break;
                 }

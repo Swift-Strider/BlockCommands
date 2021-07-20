@@ -4,10 +4,12 @@
 
 > A BlockCommand is an object that stores commands, blocks, areas, and events. When events happen in-game a BlockCommand is able to respond by running it's commands.
 
-> These strings will be replaced when inside of a command added to a BlockCommand:
+> Tips:
 >
-> - `{player}` will be replaced by the player's name when a BlockCommand is triggered.
-> - `{position}` will be the position of the block affected.
+> 1. `/sudo` only runs commands if the message has a "/."
+> 2. You can inject information of the event inside of commands
+>     - `{player}` will be replaced by the player's name when a BlockCommand is triggered.
+>     - `{position}` will be the position of the block affected.
 
 ## Usage
 
