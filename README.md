@@ -1,9 +1,7 @@
 # BlockCommands
 
-[![](https://poggit.pmmp.io/shield.state/BlockCommands)](https://poggit.pmmp.io/p/BlockCommands)
-<a href="https://poggit.pmmp.io/p/BlockCommands"><img src="https://poggit.pmmp.io/shield.state/BlockCommands"></a>
-[![](https://poggit.pmmp.io/shield.api/BlockCommands)](https://poggit.pmmp.io/p/BlockCommands)
-<a href="https://poggit.pmmp.io/p/BlockCommands"><img src="https://poggit.pmmp.io/shield.api/BlockCommands"></a>
+[![Poggit State](https://poggit.pmmp.io/shield.state/BlockCommands)](https://poggit.pmmp.io/p/BlockCommands)
+[![Poggit Shield](https://poggit.pmmp.io/shield.api/BlockCommands)](https://poggit.pmmp.io/p/BlockCommands)
 
 <div align="center">
   <img width="100" height="100" src="assets/icon.png">
