@@ -3,9 +3,7 @@
 [![Poggit State](https://poggit.pmmp.io/shield.state/BlockCommands)](https://poggit.pmmp.io/p/BlockCommands)
 [![Poggit Shield](https://poggit.pmmp.io/shield.api/BlockCommands)](https://poggit.pmmp.io/p/BlockCommands)
 
-<div align="center">
-  <img src="assets/icon.png">
-</div>
+<img align="right" width="304" height="175" src="assets/icon.png">
 
 Allows commands to run when people punch, break, step, or interact with blocks.
 
