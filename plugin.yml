@@ -1,6 +1,6 @@
 main: DiamondStrider1\BlockCommands\BCPlugin
-version: 1.0.0
-api: 3.21.1
+version: 1.0.1
+api: 4.0.0
 
 name: BlockCommands
 author: DiamondStrider1
