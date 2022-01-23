@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 
+ *
  *  BlockCommands allows setting commands for when people punch, break, step, or interact with blocks.
  *  Copyright (C) <2021>  <DiamondStrider1>
  *
@@ -17,7 +17,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
- * 
+ *
  */
 
 declare(strict_types=1);
@@ -27,13 +27,19 @@ namespace DiamondStrider1\BlockCommands;
 use DiamondStrider1\BlockCommands\commands\management\ManageCommand;
 use DiamondStrider1\BlockCommands\commands\misc\LaunchCommand;
 use DiamondStrider1\BlockCommands\commands\misc\SudoCommand;
-use pocketmine\level\Position;
+use pocketmine\world\Position;
 use pocketmine\math\Vector3;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\TextFormat as TF;
 
 class BCPlugin extends PluginBase
 {
+    private static self $instance;
+
+    public static function getInstance(): self {
+        return self::$instance;
+    }
+
     const VALID_EVENTS = [
         "punch", "break", "step", "interact"
     ];
@@ -43,7 +49,7 @@ class BCPlugin extends PluginBase
     /** @var BCListener */
     private $listener;
 
-    public function onEnable()
+    public function onEnable(): void
     {
         $this->reloadConfig();
         $this->data = new BCData($this);
@@ -59,13 +65,13 @@ class BCPlugin extends PluginBase
         $this->getServer()->getPluginManager()->registerEvents($this->listener, $this);
 
         $this->getServer()->getCommandMap()->registerAll("blockcommands", [
-            new ManageCommand("bc", $this),
-            new LaunchCommand("launch", $this),
-            new SudoCommand("sudo", $this),
+            new ManageCommand("bc"),
+            new LaunchCommand("launch"),
+            new SudoCommand("sudo"),
         ]);
     }
 
-    public function onDisable()
+    public function onDisable(): void
     {
         $this->saveData();
     }
@@ -113,15 +119,14 @@ class BCPlugin extends PluginBase
     public function getBlockCommandsAtPosition(Position $pos): array
     {
         $ret = [];
-        $pos->setComponents(
-            $pos->getFloorX(),
-            $pos->getFloorY(),
-            $pos->getFloorZ()
-        );
+        $pos->x = $pos->getFloorX();
+        $pos->y = $pos->getFloorY();
+        $pos->z = $pos->getFloorZ();
+
         $blockCommands = $this->data->getEntries();
         foreach ($blockCommands as $bc) {
             foreach ($bc["blocks"] as $block) {
-                $level = $this->getServer()->getLevelByName($block["level"]);
+                $level = $this->getServer()->getWorldManager()->getWorldByName($block["level"]);
                 if (!$level) continue;
                 $vector = new Vector3($block["x"], $block["y"], $block["z"]);
                 if ($pos->equals($vector)) {
@@ -130,8 +135,8 @@ class BCPlugin extends PluginBase
                 }
             }
             foreach ($bc["areas"] as $area) {
-                $level = $this->getServer()->getLevelByName($area["level"]);
-                if (!$level || $level !== $pos->getLevel()) continue;
+                $level = $this->getServer()->getWorldManager()->getWorldByName($area["level"]);
+                if (!$level || $level !== $pos->getWorld()) continue;
                 $vector1 = new Vector3($area["x1"], $area["y1"], $area["z1"]);
                 $vector2 = new Vector3($area["x2"], $area["y2"], $area["z2"]);
                 if ($this->in_area($pos, $vector1, $vector2)) {

@@ -24,9 +24,8 @@ declare(strict_types=1);
 
 namespace DiamondStrider1\BlockCommands;
 
-use pocketmine\command\ConsoleCommandSender;
-use pocketmine\lang\TextContainer;
-use pocketmine\utils\TextFormat as TF;
+use pocketmine\console\ConsoleCommandSender;
+use pocketmine\lang\Translatable;
 
 class BCCommandSender extends ConsoleCommandSender
 {
@@ -36,21 +35,20 @@ class BCCommandSender extends ConsoleCommandSender
     public function __construct(BCPlugin $plugin)
     {
         $this->plugin = $plugin;
-        parent::__construct();
+        parent::__construct($plugin->getServer(), $plugin->getServer()->getLanguage());
     }
 
-    public function sendMessage($message)
+    public function sendMessage(Translatable|string $message): void
     {
         if (!$this->plugin->getConfig()->get("send_blockcommand_output")) return;
-        if ($message instanceof TextContainer) {
-            $message = $this->getServer()->getLanguage()->translate($message);
-        } else {
-            $message = $this->getServer()->getLanguage()->translateString($message);
-        }
+        $server = $this->getServer();
+		if($message instanceof Translatable){
+			$message = $this->getLanguage()->translate($message);
+		}
 
-        foreach (explode("\n", trim($message)) as $line) {
-            $this->plugin->getLogger()->info(TF::GOLD . "[BlockCommandOutput] " . $line);
-        }
+		foreach(explode("\n", trim($message)) as $line){
+			$server->getLogger()->info($line);
+		}
     }
 
     public function getName(): string

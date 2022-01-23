@@ -31,14 +31,13 @@ use pocketmine\command\CommandSender;
 
 class SudoCommand extends BCCommand
 {
-    public function __construct(string $name, BCPlugin $owner)
+    public function __construct(string $name)
     {
-        parent::__construct($name, $owner);
-        $this->setDescription("Sends messages and commands as another player.");
+        parent::__construct($name, "Sends messages and commands as another player.");
         $this->setPermission("blockcommands.command.sudo");
     }
 
-    public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool
+    public function execute(CommandSender $sender, string $label, array $args): bool
     {
         $error = BCCommand::ERROR_PREFIX;
         if (count($args) < 1) {
@@ -46,7 +45,7 @@ class SudoCommand extends BCCommand
             return true;
         }
 
-        $player = $this->getPlugin()->getServer()->getPlayer($args[0]);
+        $player = $this->getOwningPlugin()->getServer()->getPlayerByPrefix($args[0]);
         if (!$player) {
             $sender->sendMessage($error . "That player is not online.");
             return true;

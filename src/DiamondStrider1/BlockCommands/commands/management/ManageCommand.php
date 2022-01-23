@@ -26,23 +26,20 @@ namespace DiamondStrider1\BlockCommands\commands\management;
 
 use DiamondStrider1\BlockCommands\BCPlugin;
 use DiamondStrider1\BlockCommands\commands\BCCommand;
-use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
-use pocketmine\level\Position;
-use pocketmine\math\Vector3;
-use pocketmine\Player;
+use pocketmine\world\Position;
+use pocketmine\player\Player;
 use pocketmine\utils\TextFormat as TF;
 
 class ManageCommand extends BCCommand
 {
-    public function __construct(string $name, BCPlugin $owner)
+    public function __construct(string $name)
     {
-        parent::__construct($name, $owner);
-        $this->setDescription("Let's the player manage BlockCommands on the server.");
+        parent::__construct($name, "Let's the player manage BlockCommands on the server.");
         $this->setPermission("blockcommands.manage");
     }
 
-    public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool
+    public function execute(CommandSender $sender, string $label, array $args): bool
     {
         switch (array_shift($args)) {
             case "loadconfig":
@@ -81,7 +78,7 @@ class ManageCommand extends BCCommand
     {
         $prefix = BCCommand::PREFIX;
         /** @var BCPlugin */
-        $plugin = $this->getPlugin();
+        $plugin = $this->getOwningPlugin();
         $version = $plugin->getDescription()->getVersion();
         $sender->sendMessage($prefix . "BlockCommands (v$version) `/$label` help:");
 
@@ -100,7 +97,7 @@ class ManageCommand extends BCCommand
     {
         $prefix = BCCommand::PREFIX;
         /** @var BCPlugin */
-        $plugin = $this->getPlugin();
+        $plugin = $this->getOwningPlugin();
 
         $sender->sendMessage($prefix . "Reloading Data");
         $time = microtime(true);
@@ -113,7 +110,7 @@ class ManageCommand extends BCCommand
     {
         $prefix = BCCommand::PREFIX;
         /** @var BCPlugin */
-        $plugin = $this->getPlugin();
+        $plugin = $this->getOwningPlugin();
 
         $sender->sendMessage($prefix . "Saving Data");
         $time = microtime(true);
@@ -127,7 +124,7 @@ class ManageCommand extends BCCommand
         $prefix = BCCommand::PREFIX;
         $error = BCCommand::ERROR_PREFIX;
         /** @var BCPlugin */
-        $plugin = $this->getPlugin();
+        $plugin = $this->getOwningPlugin();
 
         $id = array_shift($args);
         if (!$id) {
@@ -162,7 +159,7 @@ class ManageCommand extends BCCommand
     {
         $prefix = BCCommand::PREFIX;
         /** @var BCPlugin */
-        $plugin = $this->getPlugin();
+        $plugin = $this->getOwningPlugin();
 
         $bcs = $plugin->getBlockCommands();
         $sender->sendMessage($prefix . "BlockCommands List:");
@@ -183,7 +180,7 @@ class ManageCommand extends BCCommand
         $prefix = BCCommand::PREFIX;
         $error = BCCommand::ERROR_PREFIX;
         /** @var BCPlugin */
-        $plugin = $this->getPlugin();
+        $plugin = $this->getOwningPlugin();
 
         $id = array_shift($args);
         if (!$id) {
@@ -204,7 +201,7 @@ class ManageCommand extends BCCommand
         $prefix = BCCommand::PREFIX;
         $error = BCCommand::ERROR_PREFIX;
         /** @var BCPlugin */
-        $plugin = $this->getPlugin();
+        $plugin = $this->getOwningPlugin();
 
         $subcommand = array_shift($args);
 
@@ -364,12 +361,12 @@ class ManageCommand extends BCCommand
                         break;
                     }
 
-                    if (!$level && ($sender instanceof Player) && !($level = $sender->getLevel())) {
+                    if (!$level && ($sender instanceof Player) && !($level = $sender->getWorld())) {
                         $sender->sendMessage($error . "Please provide a level.");
                         break;
                     }
 
-                    if (is_string($level) && !($level = $plugin->getServer()->getLevelByName($level))) {
+                    if (is_string($level) && !($level = $plugin->getServer()->getWorldManager()->getWorldByName($level))) {
                         $sender->sendMessage($error . "That level does not exist.");
                         break;
                     }
@@ -382,7 +379,7 @@ class ManageCommand extends BCCommand
                 }
 
                 $bc["blocks"][] = [
-                    "level" => $pos->getLevelNonNull()->getFolderName(),
+                    "level" => $pos->getWorld()->getFolderName(),
                     "x" => $pos->getFloorX(),
                     "y" => $pos->getFloorY(),
                     "z" => $pos->getFloorZ()
@@ -424,12 +421,12 @@ class ManageCommand extends BCCommand
                     break;
                 }
 
-                if (!$level && ($sender instanceof Player) && !($level = $sender->getLevel())) {
+                if (!$level && ($sender instanceof Player) && !($level = $sender->getWorld())) {
                     $sender->sendMessage($error . "Please provide a level.");
                     break;
                 }
 
-                if (is_string($level) && !($level = $plugin->getServer()->getLevelByName($level))) {
+                if (is_string($level) && !($level = $plugin->getServer()->getWorldManager()->getWorldByName($level))) {
                     $sender->sendMessage($error . "That level does not exist.");
                     break;
                 }
@@ -541,7 +538,7 @@ class ManageCommand extends BCCommand
     {
         $prefix = BCCommand::PREFIX;
         /** @var BCPlugin */
-        $plugin = $this->getPlugin();
+        $plugin = $this->getOwningPlugin();
         $version = $plugin->getDescription()->getVersion();
 
         switch (strtolower($subcommand)) {

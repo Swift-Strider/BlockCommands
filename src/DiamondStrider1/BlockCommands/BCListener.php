@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 
+ *
  *  BlockCommands allows setting commands for when people punch, break, step, or interact with blocks.
  *  Copyright (C) <2021>  <DiamondStrider1>
  *
@@ -17,7 +17,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
- * 
+ *
  */
 
 declare(strict_types=1);
@@ -29,9 +29,8 @@ use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerQuitEvent;
-use pocketmine\level\Location;
 use pocketmine\math\Vector3;
-use pocketmine\Player;
+use pocketmine\player\Player;
 
 class BCListener implements Listener
 {
@@ -83,11 +82,11 @@ class BCListener implements Listener
         }
         if (!$event) return;
         $block = $ev->getBlock();
-        $bcs = $this->plugin->getBlockCommandsAtPosition($block);
+        $bcs = $this->plugin->getBlockCommandsAtPosition($block->getPosition());
         foreach ($bcs as $bc) {
             if (!$bc["events"][$event]) return;
             foreach ($bc["commands"] as $cmd) {
-                $this->runBlockCommand($cmd, $player, $block);
+                $this->runBlockCommand($cmd, $player, $block->getPosition());
             }
         }
     }
@@ -96,11 +95,11 @@ class BCListener implements Listener
     {
         $player = $ev->getPlayer();
         $block = $ev->getBlock();
-        $bcs = $this->plugin->getBlockCommandsAtPosition($block);
+        $bcs = $this->plugin->getBlockCommandsAtPosition($block->getPosition());
         foreach ($bcs as $bc) {
             if (!$bc["events"]["break"]) return;
             foreach ($bc["commands"] as $cmd) {
-                $this->runBlockCommand($cmd, $player, $block);
+                $this->runBlockCommand($cmd, $player, $block->getPosition());
             }
         }
     }
@@ -111,7 +110,7 @@ class BCListener implements Listener
         $to = $ev->getTo();
         $from = $ev->getFrom();
         if (
-            $from->getLevel() === $to->getLevel() &&
+            $from->getWorld() === $to->getWorld() &&
             $from->floor()->equals($to->floor())
         ) return;
 

@@ -26,23 +26,16 @@ namespace DiamondStrider1\BlockCommands\commands;
 
 use DiamondStrider1\BlockCommands\BCPlugin;
 use pocketmine\command\Command;
-use pocketmine\command\CommandExecutor;
-use pocketmine\command\CommandSender;
-use pocketmine\command\PluginCommand;
+use pocketmine\plugin\PluginOwned;
 use pocketmine\utils\TextFormat as TF;
 
-abstract class BCCommand extends PluginCommand implements CommandExecutor
+abstract class BCCommand extends Command implements PluginOwned
 {
     const PREFIX = TF::YELLOW . "{BlockCommands} " . TF::GREEN;
     public const ERROR_PREFIX = self::PREFIX . TF::RED;
-    public function __construct(string $name, BCPlugin $owner)
-    {
-        parent::__construct($name, $owner);
-        $this->setExecutor($this);
-    }
 
-    public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool
+    public function getOwningPlugin(): BCPlugin
     {
-        return true;
+        return BCPlugin::getInstance();
     }
 }

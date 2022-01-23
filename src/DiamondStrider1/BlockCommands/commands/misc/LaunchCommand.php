@@ -29,18 +29,17 @@ use DiamondStrider1\BlockCommands\commands\BCCommand;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\math\Vector3;
-use pocketmine\Player;
+use pocketmine\player\Player;
 
 class LaunchCommand extends BCCommand
 {
-    public function __construct(string $name, BCPlugin $owner)
+    public function __construct(string $name)
     {
-        parent::__construct($name, $owner);
-        $this->setDescription("Launches players in the given direction.");
+        parent::__construct($name, "Launches players in the given direction.");
         $this->setPermission("blockcommands.command.launch");
     }
 
-    public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool
+    public function execute(CommandSender $sender, string $label, array $args): bool
     {
         $error = BCCommand::ERROR_PREFIX;
         if (!($player = array_shift($args))) {
@@ -48,7 +47,7 @@ class LaunchCommand extends BCCommand
             return true;
         }
 
-        $player = $this->getPlugin()->getServer()->getPlayer($player);
+        $player = $this->getOwningPlugin()->getServer()->getPlayerByPrefix($player);
         if (!$player) {
             $sender->sendMessage($error . "That player is not online.");
             return true;
