@@ -49,6 +49,10 @@ class BCPlugin extends PluginBase
     /** @var BCListener */
     private $listener;
 
+    public function onLoad(): void {
+        self::$instance = $this;
+    }
+
     public function onEnable(): void
     {
         $this->reloadConfig();

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 
+ *
  *  BlockCommands allows setting commands for when people punch, break, step, or interact with blocks.
  *  Copyright (C) <2021>  <DiamondStrider1>
  *
@@ -17,7 +17,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
- * 
+ *
  */
 
 declare(strict_types=1);
@@ -361,9 +361,8 @@ class ManageCommand extends BCCommand
                         break;
                     }
 
-                    if (!$level && ($sender instanceof Player) && !($level = $sender->getWorld())) {
-                        $sender->sendMessage($error . "Please provide a level.");
-                        break;
+                    if ($sender instanceof Player) {
+                        $level ??= $sender->getWorld();
                     }
 
                     if (is_string($level) && !($level = $plugin->getServer()->getWorldManager()->getWorldByName($level))) {
@@ -421,9 +420,8 @@ class ManageCommand extends BCCommand
                     break;
                 }
 
-                if (!$level && ($sender instanceof Player) && !($level = $sender->getWorld())) {
-                    $sender->sendMessage($error . "Please provide a level.");
-                    break;
+                if ($sender instanceof Player) {
+                    $level ??= $sender->getWorld();
                 }
 
                 if (is_string($level) && !($level = $plugin->getServer()->getWorldManager()->getWorldByName($level))) {
@@ -499,7 +497,7 @@ class ManageCommand extends BCCommand
                     $sender->sendMessage($prefix . "Removed Area from " . TF::GRAY . $id);
                     break;
                 }
-                
+
                 unset($bc["blocks"][$index]);
                 $bc["blocks"] = array_values($bc["blocks"]);
                 $plugin->changeBlockCommand($id, $bc);
